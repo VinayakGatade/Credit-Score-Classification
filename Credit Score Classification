@@ -1,0 +1,199 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import plotly.express as px
+
+df = pd.read_csv('train.csv')
+
+print(df.head())
+
+df = df.dropna()
+
+df
+
+fig = px.box(df, 
+             x="Occupation",  
+             color="Credit_Score", 
+             title="Credit Scores Based on Occupation", 
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Annual_Income", 
+             color="Credit_Score",
+             title="Credit Scores Based on Annual Income", 
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Monthly_Inhand_Salary", 
+             color="Credit_Score",
+             title="Credit Scores Based on Monthly Inhand Salary", 
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Num_Bank_Accounts", 
+             color="Credit_Score",
+             title="Credit Scores Based on Number of Bank Accounts", 
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Num_Credit_Card", 
+             color="Credit_Score",
+             title="Credit Scores Based on Number of Credit cards", 
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Interest_Rate", 
+             color="Credit_Score",
+             title="Credit Scores Based on the Average Interest rates", 
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Num_of_Loan", 
+             color="Credit_Score", 
+             title="Credit Scores Based on Number of Loans Taken by the Person",
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Delay_from_due_date", 
+             color="Credit_Score",
+             title="Credit Scores Based on Average Number of Days Delayed for Credit card Payments", 
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Num_of_Delayed_Payment", 
+             color="Credit_Score", 
+             title="Credit Scores Based on Number of Delayed Payments",
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Outstanding_Debt", 
+             color="Credit_Score", 
+             title="Credit Scores Based on Outstanding Debt",
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Credit_Utilization_Ratio", 
+             color="Credit_Score",
+             title="Credit Scores Based on Credit Utilization Ratio", 
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Credit_History_Age", 
+             color="Credit_Score", 
+             title="Credit Scores Based on Credit History Age",
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Total_EMI_per_month", 
+             color="Credit_Score", 
+             title="Credit Scores Based on Total Number of EMIs per Month",
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Amount_invested_monthly", 
+             color="Credit_Score", 
+             title="Credit Scores Based on Amount Invested Monthly",
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+fig = px.box(df, 
+             x="Credit_Score", 
+             y="Monthly_Balance", 
+             color="Credit_Score", 
+             title="Credit Scores Based on Monthly Balance Left",
+             color_discrete_map={'Poor':'red',
+                                 'Standard':'yellow',
+                                 'Good':'green'})
+fig.update_traces(quartilemethod="exclusive")
+fig.show()
+
+features = df.drop(['Credit_Score', 'ID', 'Customer_ID', 'Month', 'Name', 'SSN'], axis=1)
+target = df['Credit_Score']
+
+features_encoded = pd.get_dummies(features)
+
+X_train, X_test, y_train, y_test = train_test_split(features_encoded, target, test_size=0.2, random_state=42)
+
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+predictions = model.predict(X_test)
+
+accuracy = accuracy_score(y_test, predictions)
+conf_matrix = confusion_matrix(y_test, predictions)
+classification_rep = classification_report(y_test, predictions)
+
+print(f'Accuracy: {accuracy}')
+print(f'Confusion Matrix:\n{conf_matrix}')
+print(f'Classification Report:\n{classification_rep}')
+
+
+
